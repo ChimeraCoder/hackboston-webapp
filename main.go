@@ -40,6 +40,18 @@ var bob = Person{"Bob", Male}
 
 type safeHandler func(w http.ResponseWriter, r *http.Request) error
 
+func (h safeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	err := h(w, r)
+	if err != nil {
+		handleError(w, r, err)
+	}
+}
+
+func handleError(w http.ResponseWriter, r *http.Request, err error) {
+	log.Printf("ERROR: Recovern from panic: %v", err)
+	http.Error(w, "An unexpected server error has occurred", http.StatusInternalServerError)
+}
+
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	t := template.New("base")
 
