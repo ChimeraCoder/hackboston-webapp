@@ -22,13 +22,14 @@ type Person struct {
 	Sex  SexT
 }
 
-func (p *Person) Greet() {
+func (p Person) Greet() string {
 	switch p.Name {
 	case "Alice":
-		log.Println("Hey, Bob!")
+		return "Hey, Bob!"
 	case "Bob":
-		log.Println("Hey, Alice!")
+		return "Hey, Alice!"
 	}
+	return "Eve is eavesdropping!"
 }
 
 var alice Person = Person{"Alice", Female}
