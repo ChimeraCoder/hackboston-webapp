@@ -38,8 +38,11 @@ func (p Person) Greet() string {
 var alice Person = Person{"Alice", Female}
 var bob = Person{"Bob", Male}
 
+type safeHandler func(w http.ResponseWriter, r *http.Request) error
+
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	t := template.New("base")
+
 	s1, err := t.ParseFiles("templates/base.tmpl")
 	if err != nil {
 		// TODO don't panic!
@@ -53,24 +56,25 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func serveChocolates(w http.ResponseWriter, r *http.Request) {
+func serveChocolates(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
 	number_s := vars["number"]
 	n, err := strconv.ParseInt(number_s, 10, 64)
 	if err != nil {
-		// TODO don't panic!
-		panic(err)
+		return err
 	}
 
 	t := template.New("base")
 	s1, err := t.ParseFiles("templates/chocolates.tmpl")
 	err = s1.ExecuteTemplate(w, "base", n)
+	return err
+
 }
 
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", serveHome)
-	r.HandleFunc("/chocolates/{username:[A-Za-z0-9]+}/{number:[0-9]+}", serveChocolates)
+	r.Handle("/chocolates/{username:[A-Za-z0-9]+}/{number}", safeHandler(serveChocolates))
 	http.Handle("/", r)
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatalf("Error listening, %v", err)
