@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"log"
 	"net/http"
+	"text/template"
 )
 
 // Create a type alias
@@ -36,6 +38,18 @@ var bob = Person{"Bob", Male}
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello, world!")
+	t := template.New("base")
+	s1, err := t.ParseFiles("templates/base.tmpl")
+	if err != nil {
+		// TODO don't panic!
+		panic(err)
+	}
+
+	err = s1.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		// TODO don't panic!
+		panic(err)
+	}
 }
 
 func main() {
