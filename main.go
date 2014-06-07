@@ -70,7 +70,7 @@ func serveChocolates(w http.ResponseWriter, r *http.Request) {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", serveHome)
-	r.HandleFunc("/chocolates/{username}/{number}", serveChocolates)
+	r.HandleFunc("/chocolates/{username:[A-Za-z0-9]+}/{number:[0-9]+}", serveChocolates)
 	http.Handle("/", r)
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatalf("Error listening, %v", err)
