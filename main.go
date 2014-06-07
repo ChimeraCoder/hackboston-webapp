@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
 	"log"
 	"net/http"
 	"text/template"
@@ -37,7 +35,6 @@ var alice Person = Person{"Alice", Female}
 var bob = Person{"Bob", Male}
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello, world!")
 	t := template.New("base")
 	s1, err := t.ParseFiles("templates/base.tmpl")
 	if err != nil {
