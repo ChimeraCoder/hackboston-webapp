@@ -42,7 +42,7 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	err = s1.ExecuteTemplate(w, "base", nil)
+	err = s1.ExecuteTemplate(w, "base", alice)
 	if err != nil {
 		// TODO don't panic!
 		panic(err)
