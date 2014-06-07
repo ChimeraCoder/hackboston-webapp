@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -52,9 +53,24 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func serveChocolates(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	number_s := vars["number"]
+	n, err := strconv.ParseInt(number_s, 10, 64)
+	if err != nil {
+		// TODO don't panic!
+		panic(err)
+	}
+
+	t := template.New("base")
+	s1, err := t.ParseFiles("templates/chocolates.tmpl")
+	err = s1.ExecuteTemplate(w, "base", n)
+}
+
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", serveHome)
+	r.HandleFunc("/chocolates/{username}/{number}", serveChocolates)
 	http.Handle("/", r)
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatalf("Error listening, %v", err)
