@@ -18,12 +18,18 @@ type Person struct {
 	Sex  SexT
 }
 
+func (p Person) Greet() {
+	switch p.Name {
+	case "Alice":
+		log.Println("Hey, Bob!")
+	case "Bob":
+		log.Println("Hey, Alice!")
+	}
+}
+
 var alice Person = Person{"Alice", Female}
 var bob = Person{"Bob", Male}
 
 func main() {
-
-	log.Printf("Here is Alice: %+v", alice)
-	log.Printf("Here is Bob: %+v", bob)
-
+	alice.Greet()
 }
