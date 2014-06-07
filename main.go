@@ -1,6 +1,10 @@
 package main
 
-import "log"
+import (
+	"fmt"
+	"log"
+	"net/http"
+)
 
 // Create a type alias
 // Normally this would just be called "Sex"
@@ -18,7 +22,7 @@ type Person struct {
 	Sex  SexT
 }
 
-func (p Person) Greet() {
+func (p *Person) Greet() {
 	switch p.Name {
 	case "Alice":
 		log.Println("Hey, Bob!")
@@ -30,6 +34,13 @@ func (p Person) Greet() {
 var alice Person = Person{"Alice", Female}
 var bob = Person{"Bob", Male}
 
+func serveHome(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Hello, world!")
+}
+
 func main() {
-	alice.Greet()
+	http.HandleFunc("/", serveHome)
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		log.Fatalf("Error listening, %v", err)
+	}
 }
