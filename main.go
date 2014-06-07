@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -68,6 +70,27 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func serveUserJson(w http.ResponseWriter, r *http.Request) error {
+	var user Person
+	vars := mux.Vars(r)
+	switch vars["username"] {
+	case "alice":
+		user = alice
+	case "bob":
+		user = bob
+	default:
+		return fmt.Errorf("User not supported")
+	}
+
+	bts, err := json.Marshal(user)
+	if err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Write(bts)
+	return nil
+}
+
 func serveChocolates(w http.ResponseWriter, r *http.Request) error {
 	vars := mux.Vars(r)
 	number_s := vars["number"]
@@ -86,6 +109,7 @@ func serveChocolates(w http.ResponseWriter, r *http.Request) error {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/", serveHome)
+	r.Handle("/users/{username:[A-Za-z0-9]+}.json", safeHandler(serveUserJson))
 	r.Handle("/chocolates/{username:[A-Za-z0-9]+}/{number}", safeHandler(serveChocolates))
 	http.Handle("/", r)
 	if err := http.ListenAndServe(":8000", nil); err != nil {
