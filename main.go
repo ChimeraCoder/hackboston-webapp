@@ -1,9 +1,9 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
-	"text/template"
 )
 
 // Create a type alias
