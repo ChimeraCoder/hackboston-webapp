@@ -2,13 +2,24 @@ package main
 
 import "log"
 
+// Create a type alias
+// Normally this would just be called "Sex"
+// The T (for "type") is added here just for clarity
+type SexT int
+
+const (
+	Unknown SexT = 0
+	Male         = 1
+	Female       = 2
+)
+
 type Person struct {
 	Name string
-	Sex  string
+	Sex  SexT
 }
 
-var alice Person = Person{"Alice", "female"}
-var bob = Person{"Bob", "male"}
+var alice Person = Person{"Alice", Female}
+var bob = Person{"Bob", Male}
 
 func main() {
 
