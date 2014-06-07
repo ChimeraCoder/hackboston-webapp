@@ -7,10 +7,11 @@ type Person struct {
 	Sex  string
 }
 
+var alice Person = Person{"Alice", "female"}
+var bob = Person{"Bob", "male"}
+
 func main() {
 
-	alice := Person{"Alice", "female"}
-	bob := Person{"Bob", "male"}
 	log.Printf("Here is Alice: %+v", alice)
 	log.Printf("Here is Bob: %+v", bob)
 
