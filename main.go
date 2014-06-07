@@ -8,9 +8,9 @@ import "log"
 type SexT int
 
 const (
-	Unknown SexT = 0
-	Male         = 1
-	Female       = 2
+	Unknown SexT = iota
+	Male         = iota
+	Female       = iota
 )
 
 type Person struct {
