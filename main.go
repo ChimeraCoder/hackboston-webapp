@@ -4,6 +4,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // Create a type alias
@@ -51,7 +53,9 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", serveHome)
+	r := mux.NewRouter()
+	r.HandleFunc("/", serveHome)
+	http.Handle("/", r)
 	if err := http.ListenAndServe(":8000", nil); err != nil {
 		log.Fatalf("Error listening, %v", err)
 	}
