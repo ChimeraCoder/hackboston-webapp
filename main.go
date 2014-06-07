@@ -9,8 +9,8 @@ type SexT int
 
 const (
 	Unknown SexT = iota
-	Male         = iota
-	Female       = iota
+	Male
+	Female
 )
 
 type Person struct {
